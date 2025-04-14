@@ -2,6 +2,8 @@
 
 A responsive and visually engaging car portfolio website built with **HTML**, **CSS**, and **JavaScript**. This site showcases various car models, details, and images in a stylish and interactive way.
 
+# View in your desktop for better experience
+
 ## 🔥 Features
 
 - Beautiful landing page with modern design
