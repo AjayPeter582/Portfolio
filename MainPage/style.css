@@ -162,7 +162,7 @@ header{
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap:50px;
+    gap:25px;
 }
 
 .contact-me{
