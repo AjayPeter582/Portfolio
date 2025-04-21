@@ -1,0 +1,236 @@
+body{
+    height: 100vh;
+    margin:0;
+    font-family: "Jersey 15", serif;
+}
+
+header{
+    height: 9%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 400;
+    font-size: 2.5em;
+    background-color: white;
+    box-shadow: rgba(50, 50, 93, 0.7) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.7) 0px 18px 36px -18px inset;
+    animation: livelyShadow 3s infinite alternate;
+}
+
+.main-container{
+    height:91%;
+    display: flex;
+    z-index: 0;
+    position: relative;
+}
+
+.container{
+    width:55%;
+    height:100%;
+    overflow: hidden;
+    position: relative;
+    margin: 0;
+    background-image: url('../Images/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.information {
+    height: 95%;
+    padding: 15px;
+    width: 45%;
+    position: relative;
+    font-size:30px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color:white;
+}
+
+@keyframes livelyShadow {
+    0% {
+        box-shadow: rgba(50, 50, 93, 0.4) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    }
+    50% {
+        box-shadow: rgba(50, 50, 93, 0.6) 0px 40px 70px -10px inset, rgba(0, 0, 0, 0.4) 0px 25px 50px -10px inset;
+    }
+    100% {
+        box-shadow: rgba(50, 50, 93, 0.4) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    }
+}
+
+.extra-style {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap:0px;
+}
+
+.car{
+    z-index:2;
+    width:14%;
+    height: 100px;
+    background: url("../Images/Cars/car1.png") no-repeat center;
+    background-size: cover;
+    position: absolute;
+    transition: 0.1s;
+    top:44%;
+}
+
+.parking-lot{
+    width: 12%;
+    height: 180px;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed white;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.styled-image{
+    width: 375px;
+    height: auto;
+    border-radius: 10px;
+    border: 2px solid #000;
+    transition: box-shadow 0.5s;
+}
+
+.styled-image:hover{
+    box-shadow: rgba(255, 255, 255, 0.9) 0px 5px 15px;
+}
+
+.img-container{
+    display: flex;
+    height:50vh;
+}
+
+.img-container img{
+    width:50%;
+}
+
+.btn-11{
+    position: relative; /* Ensures the pseudo-element stays inside the button */
+    border: none;
+    background: rgb(251,33,117);
+    background: linear-gradient(0deg, rgba(251,33,117,1) 0%, rgba(234,76,137,1) 100%);
+    color: #fff;
+    overflow: hidden;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 25px;
+    width:70%;
+    cursor: pointer;
+}
+
+.btn-11:hover{
+    text-decoration: none;
+    color: #fff;
+    opacity: 0.7;
+}
+
+.btn-11:before{
+    position: absolute;
+    content: '';
+    top: 0%;
+    left: -10px;
+    width: 70%;
+    height: 100%;
+    background: rgba(244, 242, 242, 0.4);
+    transform: skewX(-30deg);
+    animation: shiny-btn1 3s ease-in-out infinite;
+}
+
+.btn-11:active{
+    box-shadow: 4px 4px 6px 0 rgba(255,255,255,.3),
+                -4px -4px 6px 0 rgba(116, 125, 136, .2), 
+                inset -4px -4px 6px 0 rgba(255,255,255,.2),
+                inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
+}
+
+@keyframes shiny-btn1{
+    0% { transform: translateX(-100%) skewX(-40deg); opacity: 0; }
+    50% { opacity: 0.5; }
+    100% { transform: translateX(300%) skewX(-30deg); opacity: 0; }
+}
+
+.intern-btn-container{
+    width:100%;
+    height:70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap:25px;
+}
+
+.contact-me{
+    background-color: #3d3d3d;
+    color: #f5f5dc;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin:15px;
+}
+
+.contact{
+    text-align: center;
+    font-size: 55px;
+    margin:0;
+    letter-spacing: 2px;
+}
+
+.contact-p{
+    text-align: center;
+    font-size: 22px;
+    margin:11px;
+}
+
+form{
+    max-width: 400px;
+    margin: auto;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    background: white;
+    font-size: 16px;
+}
+
+textarea{
+    height:7.5em;
+}
+
+.send-message{
+    background: #f5f5dc;
+    border: none;
+    padding: 10px 15px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.skills-container{
+    font-size: 1em;
+    height:90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap:10px;
+    letter-spacing:1px;
+}
+.technical-container{
+    width:100%;
+    height:50%;
+}
+
+.soft-skills-container{
+    width:100%;
+    height:50%;
+}
