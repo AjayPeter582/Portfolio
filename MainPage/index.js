@@ -71,31 +71,32 @@ function checkCollision(car, lot) {
 
 function textTypingEffect(element, text, callback) {
     let i = 0;
-    let isTyping = true; // Flag to track if typing is active
+    let isTyping = true;
 
     const typingInterval = setInterval(() => {
         element.textContent += text[i];
         i++;
         if (i === text.length) {
-            clearInterval(typingInterval); // Stop typing effect
-            isTyping = false; // Mark typing as finished
-            callback(); // Trigger the next step
+            clearInterval(typingInterval);
+            isTyping = false;
+            document.removeEventListener("keydown", onKeyPress); // Clean up
+            callback();
         }
-    }, 50); // Typing speed
+    }, 50);
 
-    // Listen for Enter key but only when typing is active
     function onKeyPress(event) {
         if (event.key === "Enter" && isTyping) {
-            clearInterval(typingInterval); // Stop typing effect
-            element.textContent = text; // Show full text immediately
-            isTyping = false; // Mark typing as finished
-            callback(); // Trigger the next step
-            document.removeEventListener("keydown", onKeyPress); // Remove event listener
+            clearInterval(typingInterval);
+            element.textContent = text; // Show full text
+            isTyping = false;
+            document.removeEventListener("keydown", onKeyPress); // Clean up
+            callback();
         }
     }
 
     document.addEventListener("keydown", onKeyPress);
 }
+
 
 function attachInternshipListeners() {
     document.querySelectorAll(".custom-btn").forEach(button => {
@@ -137,22 +138,44 @@ function checkParkingCollision() {
                 informationEl.innerHTML = `
                 <div class="intern-btn-container">
                     <h1>Internships</h1>
-                    <button class="custom-btn btn-11" data-id="1">MERN intern<div class="dot"></div></button>
-                    <div class="description" id="desc-1" style="display: none;">Experience: Built a full-stack MERN application with authentication and real-time chat.</div>
+                    <button class="custom-btn btn-11" data-id="1">MERN intern @WSA<div class="dot"></div></button>
+                    <div class="description" id="desc-1" style="display: none;text-align:center;padding:0;">Completed a 2-month WSA internship, developing Homely Hub, a full-stack MERN room booking application with authentication and dynamic user interfaces.</div>
 
-                    <button class="custom-btn btn-11" data-id="2">Web Development<div class="dot"></div></button>
-                    <div class="description" id="desc-2" style="display: none;">Experience: Developed responsive websites using HTML, CSS, JavaScript, and React.</div>
+                    <button class="custom-btn btn-11" data-id="2">Web Development @Codsoft<div class="dot"></div></button>
+                    <div class="description" id="desc-2" style="display: none;text-align:center;padding:0;">Completed a 1-month CodSoft internship, building responsive web projects including a landing page, portfolio, and calculator using HTML, CSS, and JavaScript.</div>
 
-                    <button class="custom-btn btn-11" data-id="3">Software Developer intern<div class="dot"></div></button>
-                    <div class="description" id="desc-3" style="display: none;">Experience: Worked on backend APIs, optimized databases, and implemented security best practices.</div>
+                    <button class="custom-btn btn-11" data-id="3">Software Developer intern @HBS<div class="dot"></div></button>
+                    <div class="description" id="desc-3" style="display: none;text-align:center;padding:0;">Experience: Worked on backend APIs, optimized databases, and implemented security best practices.</div>
                 </div>
                 `;
                 
                 attachInternshipListeners();
-            } else if (detail === "about me") {
-                textTypingEffect(informationEl, "A full-stack developer with a strong focus on the MERN stack. I enjoy building dynamic, scalable web applications and optimizing performance and security. Currently, I’m working on a video streaming platform while exploring Next.js to enhance user experience and efficiency.", () => {
-    informationEl.innerHTML+="<p>💡 Passionate about web security, real-time applications, and API integrations<br>🛠️ Skilled in React, Node.js, Express, MongoDB, Next.js, Tailwind CSS<br>🤝 Open to collaborating on MERN projects and innovative web solutions</p>"
-                });
+            } else if (detail==="about me"){
+                informationEl.innerHTML = `
+                    <div id="about-container" style="text-align: center;">
+                        <h3 style="margin-bottom: 20px;">About Me</h3>
+                        <p id="typing-text" style="text-align: justify; font-size: 25px; display: inline-block; max-width: 800px;"></p>
+                    </div>
+                    `;
+
+                    const typingTextEl = document.getElementById("typing-text");
+
+                    textTypingEffect(
+                    typingTextEl,
+                    "I'm a full-stack developer with expertise in the MERN stack — MongoDB, Express.js, React, and Node.js. I enjoy crafting scalable web applications and solving real-world problems through clean, efficient code.",
+                    () => {
+                        typingTextEl.innerHTML += `
+                        <div style="margin-top: 20px; font-size: 22px; line-height: 1.6; text-align: left;">
+                            <p>
+                            🚀 Proficient in building responsive interfaces with React and RESTful APIs using Node.js & Express.<br>
+                            🌐 Experienced in PHP and JSP, with additional knowledge in Java and C.<br>
+                            🎯 Currently developing a video streaming platform while exploring MERN for SSR and better UX.<br>
+                            🤝 Always open to collaborating on MERN stack projects and creative web solutions.
+                            </p>
+                        </div>
+                        `;
+                    }
+                );
             } else if (detail === "skills") {
                 contentToDisplay = `
                 <div class="skills-container">
