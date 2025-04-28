@@ -1,61 +1,107 @@
 document.addEventListener("DOMContentLoaded", function () {
     const selectedCar = localStorage.getItem("selectedCar"); // Retrieve the stored car
-    console.log(selectedCar)
+    console.log(selectedCar);
+    
     if (selectedCar) {
-        document.querySelector(".car").style.backgroundImage = `url(../Images/Cars/car${selectedCar}.png)`; // Apply car image
+        const carImagePath = `../Images/Cars/car${selectedCar}.png`;
+
+        // Set the background image of the car div
+        document.querySelector(".car").style.backgroundImage = `url(${carImagePath})`;
+
+        // Set the mouse cursor to the same image
+        document.body.style.cursor = `url(${carImagePath}), auto`;
     }
 });
 
-let x_axis = 0;
-let y_axis = 0;
+document.addEventListener('click', () => {
+    // Change cursor to gear-shift on click
+    body.style.cursor = "url('../Images/gear-shift.png') 16 16, auto";
 
-document.addEventListener('keydown', (e) => {
-    // Move based on arrow keys
-    if (e.keyCode === 38) { // Up arrow
-        mov_car("up");
-    } else if (e.keyCode === 40) { // Down arrow
-        mov_car("down");
-    } else if (e.keyCode === 37) { // Left arrow
-        mov_car("left");
-    } else if (e.keyCode === 39) { // Right arrow
-        mov_car("right");
-    } else if (e.keyCode === 13) { // Enter key
-            document.querySelector(".information").innerHTML = "";
-            document.querySelector('.information').classList.remove('extra-style');
-            checkParkingCollision();
-    }
-});
+    // Restore cursor after 300ms
+    setTimeout(() => {
+      body.style.cursor = "url('../Images/transmission.png') 16 16, auto";
+    }, 100);
+  });
 
-function mov_car(direction) {
-    // Get container and car dimensions
-    const container = document.querySelector('.main-container');
-    const car = document.querySelector('.car');
-    const containerRect = container.getBoundingClientRect();
-    const carRect = car.getBoundingClientRect();
+  let x_axis = 0;
+  let y_axis = 0;
+  let rotationAngle = 0; // Rotation in degrees
+  
+  const car = document.querySelector('.car');
+  
+  document.addEventListener('keydown', (e) => {
+      if (e.keyCode === 38) { // Up arrow
+          moveCarForward();
+      } else if (e.keyCode === 40) { // Down arrow (optional reverse)
+          moveCarBackward();
+      } else if (e.keyCode === 37) { // Left arrow
+          rotateCarLeft();
+      } else if (e.keyCode === 39) { // Right arrow
+          rotateCarRight();
+      } else if (e.key.toLowerCase() === 'd') { // Full 360 spin
+          rotateCar360();
+      } else if (e.keyCode === 13) { // Enter
+          document.querySelector(".information").innerHTML = "";
+          document.querySelector('.information').classList.remove('extra-style');
+          checkParkingCollision();
+      }
+  });
+  
+  function moveCarForward() {
+      const speed = 10; // Distance to move each time
+      const angleInRadians = rotationAngle * (Math.PI / 180);
+  
+      // Calculate x and y based on the rotation angle
+      x_axis += speed * Math.cos(angleInRadians);
+      y_axis += speed * Math.sin(angleInRadians);
+  
+      updateCarTransform();
+  }
+  
+  function moveCarBackward() {
+      const speed = 10; 
+      const angleInRadians = rotationAngle * (Math.PI / 180);
+  
+      // Move backwards
+      x_axis -= speed * Math.cos(angleInRadians);
+      y_axis -= speed * Math.sin(angleInRadians);
+  
+      updateCarTransform();
+  }
+  
+  function rotateCarLeft() {
+      rotationAngle -= 10; // Turn left by 10 degrees
+      updateCarTransformSmooth();
+  }
+  
+  function rotateCarRight() {
+      rotationAngle += 10; // Turn right by 10 degrees
+      updateCarTransformSmooth();
+  }
+  
+  function rotateCar360() {
+      car.style.transition = "transform 0.5s ease-in-out";
+      rotationAngle -= 360;
+      updateCarTransform();
+      setTimeout(() => {
+          car.style.transition = "none";
+      }, 500);
+  }
+  
+  function updateCarTransform() {
+      car.style.transition = "none"; // No smooth movement
+      car.style.transformOrigin = "50% 5%";
+      car.style.transform = `translate(${x_axis}px, ${y_axis}px) rotate(${rotationAngle}deg)`;
+  }
+  
+  function updateCarTransformSmooth() {
+      car.style.transition = "transform 0.2s ease"; // Smooth rotation for left/right
+      car.style.transformOrigin = "50% 5%";
+      car.style.transform = `translate(${x_axis}px, ${y_axis}px) rotate(${rotationAngle}deg)`;
+  }
+  
 
-    // Calculate new position
-    if (direction === 'right' && (carRect.right + 10 <= containerRect.right)) {
-        x_axis += 10;
-        $(".car").css({
-            "transform": `translate(${x_axis}px, ${y_axis}px) rotate(0deg)`
-        });
-    } else if (direction === 'left' && (carRect.left - 10 >= containerRect.left)) {
-        x_axis -= 10;
-        $(".car").css({
-            "transform": `translate(${x_axis}px, ${y_axis}px) rotate(180deg)`
-        });
-    } else if (direction === 'up' && (carRect.top - 10 >= containerRect.top)) {
-        y_axis -= 10;
-        $(".car").css({
-            "transform": `translate(${x_axis}px, ${y_axis}px) rotate(270deg)`
-        });
-    } else if (direction === 'down' && (carRect.bottom + 10 <= containerRect.bottom)) {
-        y_axis += 10;
-        $(".car").css({
-            "transform": `translate(${x_axis}px, ${y_axis}px) rotate(90deg)`
-        });
-    }
-}
+  
 
 function checkCollision(car, lot) {
     const carRect = car.getBoundingClientRect();
@@ -114,12 +160,12 @@ function attachInternshipListeners() {
         });
     });
 }
-
+  
 function checkParkingCollision() {
     const car = document.querySelector('.car');
     const parkingLots = document.querySelectorAll('.parking-lot');
     const informationEl = document.querySelector('.information');
-    let contentToDisplay = ""; // Initialize content string
+    let contentToDisplay = "";
 
     parkingLots.forEach((lot) => {
         if (checkCollision(car, lot)) {
@@ -175,10 +221,7 @@ function checkParkingCollision() {
                         </div>
                         `;
                     }
-                    );
-
-              
-                
+                );
             } else if (detail === "skills") {
                 contentToDisplay = `
                 <div class="skills-container">
@@ -199,34 +242,62 @@ function checkParkingCollision() {
                 </div>
                 `;
             } else if (detail === "projects") {
-                contentToDisplay = `<p>Atty - Chat App<br> (React, Tailwind, Daisy UI, Socket.io)<br><br>
-                Playhaven - Video Streaming Platform<br>(MERN stack, JWT authentication, user subscriptions)<br><br>
-                30+ Mini JavaScript Projects<br>(Did this while learning JS) <br><br>
-                Attendance Management System<br> (Java Swing + MySQL)<br><br>
-                Placement Record Management System <br>(JSP, MySQL)<br><br>
-                </p>`;
+                contentToDisplay = `
+                <div class="projects" style="height: 95%; position: relative; padding: 20px; background: linear-gradient(to bottom, #333 0%, #222 100%); border-radius: 15px;">
+                <!-- Road Track Frame -->
+                <div style="width: 100%; height: 95%; border: 6px dashed #555; border-radius: 15px; background: #111; position: relative; overflow: hidden;">
+                    <!-- Iframe Road Content -->
+                    <iframe id="scrollFrame" width="98%" height="98%" style="margin: 1%; border: none; border-radius: 10px; background: #f5f5f5; overflow: auto;"
+                        src="projects-content.html">
+                    </iframe>
+                </div>
+            </div>
+
+            <script>
+                const interval = setInterval(() => {
+                    const iframe = document.querySelector('#scrollFrame');
+                    const car = document.querySelector('#carScroller');
+                    if (iframe && iframe.contentWindow && iframe.contentDocument.readyState === 'complete') {
+                        const iframeBody = iframe.contentDocument.body;
+
+                        iframe.contentWindow.addEventListener('scroll', () => {
+                            const scrollTop = iframe.contentWindow.scrollY;
+                            const scrollHeight = iframeBody.scrollHeight - iframe.offsetHeight;
+                            const percent = scrollTop / scrollHeight;
+
+                            const trackHeight = iframe.offsetHeight - car.offsetHeight;
+                            car.style.top = (percent * trackHeight) + 'px';
+                        });
+
+                        clearInterval(interval);
+                    }
+                }, 100);
+            </script>
+
+                `;
+                
             } else if (detail === "contact") {
-                informationEl.innerHTML= `
+                informationEl.innerHTML = `
                 <div class="contact-me">
                     <h1 class="contact">CONTACT ME</h1>
                     <p class="contact-p">----xxx----</p>
                     <p class="contact-p">I'LL BE GLAD TO ANSWER YOUR QUESTIONS!</p>
-                    <form>
+                    <form id="contact-form">
                         <input type="text" name="name" placeholder="Name" required>
-                        <input type="email" name="email" placeholder="Email address" required>
+                        <input type="email" name="from_email" placeholder="Email address" required>
                         <input type="text" name="subject" placeholder="Subject">
                         <textarea name="message" placeholder="Your message" required></textarea>
                         <button type="submit" class="send-message">Send Message</button>
                     </form>
                     <div class="contact-container">
-                        <a href=""><img src="../Images/Logo/github.png"></a>
-                        <a href=""><img src="../Images/Logo/linkedin.png"></a>
-                        <a href=""><img src="../Images/Logo/gmail.png"></a>
-                        <a href=""><img src="../Images/Logo/instagram.png"></a>
+                        <a href="https://github.com/AjayPeter582"><img src="../Images/Logo/github.png"></a>
+                        <a href="https://www.linkedin.com/in/ajay-peter-r/"><img src="../Images/Logo/linkedin.png"></a>
+                        <a href="#"><img src="../Images/Logo/gmail.png"></a>
+                        <a href="https://www.instagram.com/_ajay_peter_005/"><img src="../Images/Logo/instagram.png"></a>
                         <a href=""><img src="../Images/Logo/github.png"></a>
                     </div>
                 </div>
-               `;
+                `;
             }
             // Update content at the end of loop
             if (contentToDisplay) {

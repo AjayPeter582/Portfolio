@@ -26,11 +26,15 @@
     
             </div>
         </div>
-        <script src="index.js"></script>
+        <script src="index.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
         <script>
             $(document).ready(function() {
                 console.log("jQuery is working!");
             });
+            (function() {
+                emailjs.init("LViFKUPLKxmK3hG1X"); // Replace with your public key
+            })();
         </script>
     </body>
 </html>
